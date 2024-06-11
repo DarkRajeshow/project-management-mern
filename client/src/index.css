@@ -31,19 +31,22 @@ body {
 
 td,
 th {
-  @apply border border-zinc-500 text-center
+  @apply border border-zinc-500 text-center text-sm sm:text-base 
 }
 
 th {
-  @apply font-semibold
+  @apply font-normal sm:font-semibold 
 }
 
 input, select {
-  @apply w-full p-2 border-none outline-none rounded-sm bg-zinc-700/40 focus:bg-zinc-700/80 mt-1
+  @apply w-full p-1 text-sm sm:text-base sm:p-2 border-none outline-none rounded-sm bg-zinc-700/40 focus:bg-zinc-700/80 mt-1
+}
+option{
+  @apply text-sm
 }
 
 label {
-  @apply block text-zinc-300 py-2
+  @apply block text-zinc-300 py-1 sm:py-2 text-sm sm:text-base
 }
 
 button {

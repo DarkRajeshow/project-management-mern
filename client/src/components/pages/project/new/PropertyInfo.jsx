@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { fetchPropertyInfoAPI, propertyInfoAPI } from '../../../../utility/api';
 import numberToWords from '../../../../utility/numberToWords';
@@ -71,10 +71,10 @@ const PropertyInfo = () => {
         fetchPropertyInfo();
     }, [id, fetchPropertyInfo]);
     return (
-        <div className="px-20 mx-auto p-8 bg-zinc-800 rounded">
+        <div className="px-4 sm:px-10 md:px-14 lg:px-20 mx-auto p-8 bg-zinc-800 rounded">
             <p className='font-semibold text-zinc-500 '>Step 2 out of 5.</p>
-            <h2 className="text-2xl font-bold mb-2">Property Information about the project</h2>
-            <form onSubmit={handleSubmit} className='grid sm:grid-cols-2 gap-4'>
+            <h2 className="text-xl sm:text-2xl font-semibold sm:font-bold mb-2">Property Information about the project</h2>
+            <form onSubmit={handleSubmit} className='sm:grid sm:grid-cols-2 gap-4'>
                 <div className="mb-4">
                     <label className="block ">Total Plats</label>
                     <input
@@ -161,26 +161,37 @@ const PropertyInfo = () => {
                     <p className='text-green-500 font-semibold text-sm my-2' >{numberToWords(propertyInfo.estimatedCost)}</p>
                 </div>
                 <div className="flex justify-between items-center col-span-2">
-                    <button
-                        type="submit"
-                        className={`px-4 font-semibold py-1.5 bg-blue-600 rounded-md flex gap-2 items-center justify-center `}
+                    <Link
+                        to={`/projects/${id}/basic-info`}
+                        className={`px-2 sm:px-4 sm:font-semibold py-1.5 rounded-md flex gap-2 items-center justify-center text-sm sm:text-base bg-zinc-700 hover:bg-zinc-600 `}
                     >
-                        {isSaved && <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-green-300">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
-                        </svg>}
-                        Save
-                    </button>
-                    <button
-                        type="button"
-                        disabled={!isSaved}
-                        onClick={handleNext}
-                        className={`px-4 font-semibold py-1.5 rounded-md flex gap-2 items-center justify-center ${isSaved ? 'bg-green-600 hover:bg-green-700' : 'bg-zinc-600'}`}
-                    >
-                        Next
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811V8.69ZM12.75 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061a1.125 1.125 0 0 1-1.683-.977V8.69Z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 sm:size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M21 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061A1.125 1.125 0 0 1 21 8.689v8.122ZM11.25 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061a1.125 1.125 0 0 1 1.683.977v8.122Z" />
                         </svg>
-                    </button>
+                        Previous
+                    </Link>
+                    <div className='flex items-center justify-center gap-4'>
+                        <button
+                            type="submit"
+                            className={`px-2 sm:px-4 sm:font-semibold py-1.5 rounded-md flex gap-2 items-center justify-center text-sm sm:text-base bg-blue-600 `}
+                        >
+                            {isSaved && <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 sm:size-6 text-green-300">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
+                            </svg>}
+                            Save
+                        </button>
+                        <button
+                            type="button"
+                            disabled={!isSaved}
+                            onClick={handleNext}
+                            className={`px-2 sm:px-4 sm:font-semibold py-1.5 rounded-md flex gap-2 items-center justify-center text-sm sm:text-base ${isSaved ? 'bg-green-600 hover:bg-green-700' : 'bg-zinc-600'}`}
+                        >
+                            Next
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 sm:size-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M3 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811V8.69ZM12.75 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061a1.125 1.125 0 0 1-1.683-.977V8.69Z" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>

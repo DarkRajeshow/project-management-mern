@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { amenitiesAPI, fetchAmenitiesAPI } from '../../../../utility/api';
 
@@ -12,6 +12,10 @@ const Amenities = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            if (amenities.length === 0) {
+                toast.warning("Must select at least one amenities");
+                return;
+            }
             const { data } = await amenitiesAPI(id, amenities);
             if (data.success) {
                 toast.success(data.status);
@@ -28,7 +32,12 @@ const Amenities = () => {
     };
 
     const handleNext = () => {
-        navigate(`/projects/${id}/gallery`);
+        if (amenities.length > 0) {
+            navigate(`/projects/${id}/gallery`);
+        }
+        else {
+            toast.warning("Must select at least one amenities.")
+        }
     };
 
 
@@ -86,12 +95,12 @@ const Amenities = () => {
     return (
         <div className="container mx-auto p-4">
             <p className='font-semibold text-zinc-500 '>Step 3 out of 5.</p>
-            <h2 className="text-2xl font-bold mb-4">Amenities for the project</h2>
-            <div className={`flex gap-3 mb-6 mt-2 py-3 px-4 rounded-md items-center ${amenities.length === amenityOptions.length ? 'bg-zinc-600/50' : 'bg-zinc-700/40'}`} >
+            <h2 className="text-xl sm:text-2xl font-semibold sm:font-bold mb-4">Amenities for the project</h2>
+            <div className={`flex gap-3 mb-6 mt-2 py-1 sm:py-3 px-2 sm:px-4 rounded-md items-center ${amenities.length === amenityOptions.length ? 'bg-zinc-600/50' : 'bg-zinc-700/40'}`} >
                 <input
                     type="checkbox"
                     id="selectAll"
-                    className="mr-2 w-20 "
+                    className="mr-2 w-20"
                     hidden
                     onChange={handleSelectAll}
                 />
@@ -104,12 +113,12 @@ const Amenities = () => {
                         )}
                     </label>
                 </div>
-                <label htmlFor="selectAll" className='text-lg font-semibold cursor-pointer w-full'>Select All</label>
+                <label htmlFor="selectAll" className='text-base sm:text-lg font-semibold cursor-pointer w-full'>Select All</label>
             </div>
-            <form onSubmit={handleSubmit} className='grid sm:grid-cols-2 gap-6'>
+            <form onSubmit={handleSubmit} className='sm:grid sm:grid-cols-2 gap-6'>
                 <div>
                     {amenityOptions.slice(0, 5).map((option) => (
-                        <div key={option.value} className={`grid grid-cols-4 gap-3 mb-2 py-3 px-4 rounded-md items-center ${amenities.includes(option.value) ? 'bg-zinc-600/50' : 'bg-zinc-700/40'}`}>
+                        <div key={option.value} className={`grid grid-cols-5 mb-2 py-2 sm:py-3 px-3 sm:px-4 rounded-md items-center ${amenities.includes(option.value) ? 'bg-zinc-600/50' : 'bg-zinc-700/40'}`}>
                             <input
                                 type="checkbox"
                                 id={option.value}
@@ -128,13 +137,13 @@ const Amenities = () => {
                                     </svg>
                                 )}
                             </label>
-                            <label className='col-span-3 text-lg font-semibold cursor-pointer' htmlFor={option.value}>{option.label}</label>
+                            <label className='text-base sm:text-lg col-span-4 font-semibold cursor-pointer' htmlFor={option.value}>{option.label}</label>
                         </div>
                     ))}
                 </div>
                 <div>
                     {amenityOptions.slice(5).map((option) => (
-                        <div key={option.value} className={`grid grid-cols-4 gap-3 mb-2 py-3 px-4 rounded-md items-center ${amenities.includes(option.value) ? 'bg-zinc-600/50' : 'bg-zinc-700/40'}`}>
+                        <div key={option.value} className={`grid grid-cols-5 mb-2 py-2 sm:py-3 px-3 sm:px-4 rounded-md items-center ${amenities.includes(option.value) ? 'bg-zinc-600/50' : 'bg-zinc-700/40'}`}>
                             <input
                                 type="checkbox"
                                 id={option.value}
@@ -152,31 +161,42 @@ const Amenities = () => {
                                     </svg>
                                 )}
                             </label>
-                            <label className='col-span-3 text-lg font-semibold cursor-pointer' htmlFor={option.value}>{option.label}</label>
+                            <label className='col-span-4 text-base sm:text-lg font-semibold cursor-pointer' htmlFor={option.value}>{option.label}</label>
                         </div>
                     ))}
                 </div>
                 <div className="flex justify-between items-center col-span-2">
-                    <button
-                        type="submit"
-                        className={`px-4 font-semibold py-1.5 bg-blue-600 rounded-md flex gap-2 items-center justify-center `}
+                    <Link
+                        to={`/projects/${id}/property-info`}
+                        className={`px-2 sm:px-4 sm:font-semibold py-1.5 rounded-md flex gap-2 items-center justify-center text-sm sm:text-base bg-zinc-700 hover:bg-zinc-600 `}
                     >
-                        {isSaved && <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
-                        </svg>}
-                        Save
-                    </button>
-                    <button
-                        type="button"
-                        disabled={!isSaved}
-                        onClick={handleNext}
-                        className={`px-4 font-semibold py-1.5 rounded-md flex gap-2 items-center justify-center ${isSaved ? 'bg-green-600 hover:bg-green-700' : 'bg-zinc-600'}`}
-                    >
-                        Next
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811V8.69ZM12.75 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061a1.125 1.125 0 0 1-1.683-.977V8.69Z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 sm:size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M21 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061A1.125 1.125 0 0 1 21 8.689v8.122ZM11.25 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061a1.125 1.125 0 0 1 1.683.977v8.122Z" />
                         </svg>
-                    </button>
+                        Previous
+                    </Link>
+                    <div className='flex items-center justify-center gap-4'>
+                        <button
+                            type="submit"
+                            className={`px-2 sm:px-4 sm:font-semibold py-1.5 rounded-md flex gap-2 items-center justify-center text-sm sm:text-base bg-blue-600 `}
+                        >
+                            {isSaved && <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
+                            </svg>}
+                            Save
+                        </button>
+                        <button
+                            type="button"
+                            disabled={!isSaved}
+                            onClick={handleNext}
+                            className={`px-2 sm:px-4 sm:font-semibold py-1.5 rounded-md flex gap-2 items-center justify-center text-sm sm:text-base ${isSaved ? 'bg-green-600 hover:bg-green-700' : 'bg-zinc-600'}`}
+                        >
+                            Next
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M3 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811V8.69ZM12.75 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061a1.125 1.125 0 0 1-1.683-.977V8.69Z" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>

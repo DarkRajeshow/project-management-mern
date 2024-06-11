@@ -1,4 +1,4 @@
-export default function numberToWord(num) {
+export default function numberToWords(num) {
     if (num === 0) return 'ZERO';
 
     const belowTwenty = [

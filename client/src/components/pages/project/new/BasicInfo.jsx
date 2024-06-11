@@ -2,11 +2,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { basicInfoAPI, fetchBasicInfoAPI, fetchProjectsAPI } from '../../../../utility/api';
 import { toast } from 'sonner';
+import { fetchCities, fetchStates } from '../../../../utility/cityStateApi';
 
 const BasicInfoForm = () => {
     const { id } = useParams(); // Get project ID from URL
     const navigate = useNavigate(); // For navigation
     const [validationError, setValidationError] = useState(false);
+
     const [projects, setProjects] = useState([]);
     const [basicInfo, setBasicInfo] = useState({
         name: '',
@@ -102,6 +104,43 @@ const BasicInfoForm = () => {
         return true;
     }, [projects, id])
 
+
+    const [states, setStates] = useState([]);
+    const [cities, setCities] = useState([]);
+
+    // Fetch states on component mount
+    useEffect(() => {
+        const getStates = async () => {
+            try {
+                const statesData = await fetchStates();
+                setStates(statesData);
+            } catch (error) {
+                console.error('Error fetching states:', error);
+            }
+        };
+
+        getStates();
+    }, []);
+
+    // Fetch cities based on selected state
+    useEffect(() => {
+        if (basicInfo.state) {
+            const getCities = async () => {
+                try {
+                    const citiesData = await fetchCities(basicInfo.state);
+                    setCities(citiesData);
+                } catch (error) {
+                    console.error('Error fetching cities:', error);
+                }
+            };
+
+            getCities();
+        } else {
+            setCities([]);
+        }
+    }, [basicInfo.state]);
+
+
     // useEffect to fetch basic info on component mount
     useEffect(() => {
         fetchBasicInfo();
@@ -116,10 +155,10 @@ const BasicInfoForm = () => {
         }
     }, [basicInfo.name, isProjectNameUnique])
     return (
-        <div className="px-20 mx-auto p-8 bg-zinc-800 shadow-md rounded">
-            <p className='font-semibold text-zinc-500 '>Step 1 out of 5.</p>
-            <h2 className="text-2xl font-bold mb-2">Basic Information about the project</h2>
-            <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-4">
+        <div className="px-4 sm:px-10 md:px-14 lg:px-20 mx-auto p-8 bg-zinc-800 shadow-md rounded">
+            <p className='sm:font-semibold text-zinc-500 '>Step 1 out of 5.</p>
+            <h2 className="text-xl sm:text-2xl font-semibold sm:font-bold mb-2">Basic Information about the project</h2>
+            <form onSubmit={handleSubmit} className="sm:grid sm:grid-cols-2 gap-4">
                 <div>
                     <div className="mb-4">
                         <label className="block">Project Name</label>
@@ -137,15 +176,19 @@ const BasicInfoForm = () => {
                     </div>
                     <div className="mb-4">
                         <label className="block">State</label>
-                        <input
-                            type="text"
+                        <select
                             name="state"
                             value={basicInfo.state}
                             onChange={handleChange}
-                            className="w-full p-2 border border-gray-300 rounded mt-1"
-                            placeholder="Enter state"
-                            required
-                        />
+                            className="w-full p-2 outline-none rounded bg-zinc-700/20 focus:bg-zinc-700 mt-1"
+                        >
+                            <option value="">Select State</option>
+                            {states.map((state) => (
+                                <option key={state.id} value={state.state_name}>
+                                    {state.state_name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className="mb-4">
                         <label className="block">Address</label>
@@ -191,15 +234,20 @@ const BasicInfoForm = () => {
                     </div>
                     <div className="mb-4">
                         <label className="block">City</label>
-                        <input
-                            type="text"
+                        <select
                             name="city"
                             value={basicInfo.city}
                             onChange={handleChange}
-                            className="w-full p-2 border border-gray-300 rounded mt-1"
-                            placeholder="Enter city"
-                            required
-                        />
+                            className="w-full p-2 outline-none rounded bg-zinc-700/20 focus:bg-zinc-700 mt-1"
+                            disabled={!basicInfo.state}
+                        >
+                            <option value="">Select City</option>
+                            {cities.map((city) => (
+                                <option key={city.id} value={city.city_name}>
+                                    {city.city_name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className="mb-4">
                         <label className="block">Land Status</label>
@@ -234,10 +282,10 @@ const BasicInfoForm = () => {
                 <div className="flex justify-between items-center col-span-2">
                     <button
                         type="submit"
-                        className={`px-4 font-semibold py-1.5 rounded-md flex gap-2 items-center justify-center ${validationError ? 'bg-zinc-600' : ' bg-blue-600'}`}
+                        className={`px-2 sm:px-4 sm:font-semibold py-1.5 rounded-md flex gap-2 items-center justify-center text-sm sm:text-base ${validationError ? 'bg-zinc-600' : ' bg-blue-600'}`}
                         disabled={validationError}
                     >
-                        {isSaved && <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        {isSaved && <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 sm:size-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
                         </svg>}
                         Save
@@ -246,10 +294,10 @@ const BasicInfoForm = () => {
                         type="button"
                         disabled={!isSaved}
                         onClick={handleNext}
-                        className={`px-4 font-semibold py-1.5 rounded-md flex gap-2 items-center justify-center ${isSaved ? 'bg-green-600 hover:bg-green-700' : 'bg-zinc-600'}`}
+                        className={`px-2 sm:px-4 sm:font-semibold py-1.5 rounded-md flex gap-2 items-center justify-center text-sm sm:text-base ${isSaved ? 'bg-green-600 hover:bg-green-700' : 'bg-zinc-600'}`}
                     >
                         Next
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 sm:size-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M3 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811V8.69ZM12.75 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061a1.125 1.125 0 0 1-1.683-.977V8.69Z" />
                         </svg>
                     </button>
