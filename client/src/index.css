@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply overflow-x-hidden w-screen min-h-screen font-normal
+}
+
+* {
+  font-family: "Montserrat", sans-serif;
+  @apply m-0 p-0 transition-all box-border
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-zinc-900/70 rounded-md
+}
+
+::-webkit-scrollbar-thumb {
+  @apply border-2 rounded-md bg-zinc-700
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #718096;
+}
+
+td,
+th {
+  @apply border border-zinc-500 text-center
+}
+
+th {
+  @apply font-semibold
+}
+
+input, select {
+  @apply w-full p-2 border-none outline-none rounded-sm bg-zinc-700/40 focus:bg-zinc-700/80 mt-1
+}
+
+label {
+  @apply block text-zinc-300 py-2
+}
+
+button {
+  @apply shadow-[1px_1px_0_0] shadow-white hover:shadow-none
+}
