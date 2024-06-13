@@ -10,6 +10,7 @@ import PropertyInfo from './components/pages/project/new/PropertyInfo';
 import Gallary from './components/pages/project/new/Gallary';
 import Documents from './components/pages/project/new/Documents';
 import Protected from './components/special/Protected';
+import Project from './components/pages/project/Project';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/projects/:id" element={<Protected Component={Project} />} />
           <Route path="/projects/:id/basic-info" element={<Protected Component={BasicInfoForm} />} />
           <Route path="/projects/:id/property-info" element={<Protected Component={PropertyInfo} />} />
           <Route path="/projects/:id/amenities" element={<Protected Component={Amenities} />} />

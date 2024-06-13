@@ -20,7 +20,7 @@ export const initiateProject = async (req, res) => {
 
             const user = await User.findById(userId);
             if (!user) {
-                return res.status(404).json({
+                return res.json({
                     success: false,
                     status: "User not found."
                 });
@@ -184,7 +184,7 @@ export const getAllProjects = async (req, res) => {
         const user = await User.findById(userId).populate('projects', 'basicInfo');
 
         if (!user) {
-            return res.status(404).json({ success: false, status: "User not found." });
+            return res.json({ success: false, status: "User not found." });
         }
 
         const projects = user.projects;
@@ -192,9 +192,23 @@ export const getAllProjects = async (req, res) => {
         return res.json({ success: true, status: "Projects retrieved successfully.", projects });
     } catch (err) {
         console.error(err);
-        return res.status(500).json({ success: false, status: "Internal server error." });
+        return res.json({ success: false, status: "Internal server error." });
     }
 };
+
+
+export const getProjectById = async (req, res) => {
+    try {
+        const project = await Project.findById(req.params.id).populate('user').exec();
+        if (!project) {
+            return res.json({ success: false, message: 'Project not found.' });
+        }
+        res.json({ success: true, status: 'Project details retrived successfully.', project });
+    } catch (error) {
+        console.error(error);
+        res.json({ success: false, message: 'Internal server error.' });
+    }
+}
 
 
 export const getBasicInfo = async (req, res) => {
@@ -359,21 +373,21 @@ export const deleteGalleryFile = async (req, res) => {
 };
 
 
-export const deleteProject = async (req, res) => {
+export const deleteProjectById = async (req, res) => {
     const { id } = req.params;
 
     try {
         const project = await Project.findById(id);
 
         if (!project) {
-            return res.status(404).json({ success: false, status: "Project not found." });
+            return res.json({ success: false, status: "Project not found." });
         }
 
         await Project.findByIdAndDelete(id);
 
-        return res.status(200).json({ success: true, status: "Project deleted successfully." });
+        return res.json({ success: true, status: "Project deleted successfully." });
     } catch (err) {
         console.error(err);
-        return res.status(500).json({ success: false, status: "Internal server error." });
+        return res.json({ success: false, status: "Internal server error." });
     }
 }

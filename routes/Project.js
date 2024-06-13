@@ -2,11 +2,12 @@ import express from "express";
 import {
     deleteDocument,
     deleteGalleryFile,
-    deleteProject,
+    deleteProjectById,
     getAmenities,
     getBasicInfo,
     getDocuments,
     getGallery,
+    getProjectById,
     getPropertyInfo,
     initiateProject,
     saveAmenities,
@@ -54,6 +55,7 @@ router.patch('/:id/documents', (req, res, next) => {
 }, saveDocuments);
 
 
+
 router.get('/:id/basic-info', getBasicInfo)
 router.get('/:id/property-info', getPropertyInfo)
 router.get('/:id/amenities', getAmenities)
@@ -61,7 +63,8 @@ router.get('/:id/gallery', getGallery)
 router.get('/:id/documents', getDocuments);
 
 router.delete('/:id/gallery/:type/:filename', deleteGalleryFile)
-router.delete('/:id', deleteProject);
+router.get('/:id', getProjectById);
+router.delete('/:id', deleteProjectById);
 
 
 router.delete('/:id/documents/:filename', deleteDocument);

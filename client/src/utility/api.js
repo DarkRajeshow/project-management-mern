@@ -68,6 +68,10 @@ export const deleteFileByNameAPI = async (projectId, type, filename) => {
   return apiRequest('delete', `/api/projects/${projectId}/gallery/${type}/${filename}`);
 }
 
+export const fetchProjectByIdAPI = async (projectId) => {
+  return apiRequest('get', `/api/projects/${projectId}`);
+}
+
 export const fetchProjectsAPI = async () => {
   return apiRequest('get', `/api/user/projects`);
 }

@@ -99,14 +99,14 @@ const Home = () => {
             <table className="w-full rounded-md overflow-hidden border border-zinc-400 bg-zinc-700 shadow-2xl">
                 <thead>
                     <tr className='bg-zinc-600 text-blue-100'>
-                        <th className="px-2 sm:px-6 py-3">Sr. No.</th>
-                        <th className="px-2 sm:px-6 py-3">Project Title</th>
-                        <th className="hidden md:table-cell px-2 sm:px-6 py-3 ">Project Address</th>
-                        <th className="hidden lg:table-cell px-2 sm:px-6 py-3 ">Project Type</th>
-                        <th className="hidden xl:table-cell px-2 sm:px-6 py-3 ">RERA Number</th>
-                        <th className="hidden xl:table-cell px-2 sm:px-6 py-3 ">Proposed Completion Date</th>
-                        <th className="px-2 sm:px-6 py-3 ">View</th>
-                        <th className="px-2 sm:px-6 py-3 ">Delete</th>
+                        <th className="">Sr. No.</th>
+                        <th className="">Project Title</th>
+                        <th className="hidden md:table-cell  ">Project Address</th>
+                        <th className="hidden xl:table-cell  ">RERA Number</th>
+                        <th className="hidden xl:table-cell  ">Proposed Completion Date</th>
+                        <th className=" ">View</th>
+                        <th className=" ">Update</th>
+                        <th className=" ">Delete</th>
                     </tr>
                 </thead>
                 <tbody className="divide-y bg-zinc-700/20 text-zinc-300 divide-zinc-200">
@@ -118,11 +118,21 @@ const Home = () => {
                                     <td className="px-2 sm:px-6 py-4">{srNo}</td>
                                     <td className="px-2 sm:px-6 py-4">{project.basicInfo.name}</td>
                                     <td className="hidden md:table-cell px-2 sm:px-6 py-4">{project.basicInfo.address}</td>
-                                    <td className="hidden lg:table-cell px-2 sm:px-6 py-4">{project.basicInfo.projectType}</td>
                                     <td className="hidden xl:table-cell px-2 sm:px-6 py-4">{project.basicInfo.reraNumber}</td>
                                     <td className="hidden xl:table-cell px-2 sm:px-6 py-4 tracking-widest">{new Date(project.basicInfo.dateOfCompletion).toLocaleDateString()}</td>
                                     <td className="px-2 sm:px-6 py-4">
-                                        <Link to={`/projects/${project._id}/basic-info`} className='text-blue-300'>Open</Link>
+                                        <Link to={`/projects/${project._id}`} className='text-blue-300'>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 mx-auto">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                                            </svg>
+                                        </Link>
+                                    </td>
+                                    <td className="px-2 sm:px-6 py-4">
+                                        <Link to={`/projects/${project._id}/basic-info`} className='text-blue-300'>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 mx-auto">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                            </svg>
+                                        </Link>
                                     </td>
                                     <td className="px-2 sm:px-6 py-4">
                                         <button onClick={handleDelete.bind(this, project._id)} className='shadow-none text-red-300'>
